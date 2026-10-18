@@ -9,6 +9,11 @@ jobs:
     container:
       image: debian:13
     steps:
+
+      - name: Install git
+        run: |
+          apt-get update apt-get install -y git
+         
       - uses: actions/checkout@v7
         with:          
             path: stl122
