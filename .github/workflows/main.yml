@@ -53,15 +53,12 @@ jobs:
             libavahi-client-dev libavahi-common-dev libaio-dev \
             python3-mako python3-cheetah python3-numpy \
             autoconf automake libtool ninja-build
+          cd "$GITHUB_WORKSPACE/sdrangel"  
           bash cmake/ci/build_sdrplay.sh
-      - name: Build SDRangel
+
+
+      - name: build
+        working-directory: ${{ github.workspace }}/sdrangel
         run: |
-          if [ "${RUNNING_IN_ACT:-}" = "true" ]; then
-            mkdir -p /tmp/build
-            rsync -a --delete . /tmp/build/sdrangel/
-            cd /tmp/build/sdrangel
-            debuild -i -us -uc -b
-            cp ../sdrangel_*_amd64.deb "$GITHUB_WORKSPACE"/
-          else
-            debuild -i -us -uc -b
-          fi
+             debuild -i -us -uc -b
+             cp ../sdrangel_*_amd64.deb "$GITHUB_WORKSPACE"/
