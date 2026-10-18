@@ -30,6 +30,32 @@ jobs:
 
 
 
+      - name: Restore APT cache
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives
+          # Use a simple versioned key or hash a file that contains the list of packages
+          key: ${{ runner.os }}-apt-archives-v1
+          restore-keys: |
+            ${{ runner.os }}-apt-archives-
+
+      - name: Install git (and ccache)
+        run: |
+          apt-get update
+          apt-get install -y git ccache
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-ccache-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
+
+
+
+
+
       - name: Install dependencies
         run: |
           apt-get update
